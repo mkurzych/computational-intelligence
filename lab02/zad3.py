@@ -14,7 +14,7 @@ irises = pd.read_csv("iris1.csv")
 versions = [('Original', None), ('Min-Max Normalized', MinMaxScaler()), ('Z-Score Normalized', StandardScaler())]
 iris_varieties = ["Setosa", "Versicolor", "Virginica"]
 
-fig, axs = plt.subplots(len(versions), figsize=(10, 15))
+fig, axs = plt.subplots(len(versions), figsize=(10, 15), sharey=True, sharex=True)
 
 i = 0
 for version in versions:

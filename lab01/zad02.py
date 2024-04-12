@@ -25,7 +25,7 @@ def projectile_motion(v0, theta, h0, g=9.81, dt=0.01):
     return np.array(x), np.array(y)
 
 
-d = random.randint(225, 340)
+d = random.randint(50, 340)
 v = 50
 h = 100
 a = 0

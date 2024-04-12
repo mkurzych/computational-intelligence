@@ -1,11 +1,11 @@
 import pandas as pd
-import numpy as np
+# import numpy as np
 
 missing_values = ("n/a", "na", "--", '-')
 irises = pd.read_csv("iris_with_errors.csv", na_values=missing_values)
 print(irises.head())
 
-# a) Policz ile jest w bazie brakujących lub nieuzupełnionych danych.
+# a) Policz, ile jest w bazie brakujących lub nieuzupełnionych danych.
 # Wyświetl statystyki bazy danych z błędami.
 
 print(irises.isnull().sum().sum())

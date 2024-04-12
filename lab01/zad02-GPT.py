@@ -72,7 +72,7 @@ def aim_trebuchet(target_distance, initial_height=100, initial_velocity=50, grav
 
 
 # Define initial conditions
-target_distance = random.randint(225, 340)
+target_distance = random.randint(50, 340)
 
 print("Your target is", target_distance, "m away")
 
