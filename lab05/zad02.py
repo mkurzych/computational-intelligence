@@ -7,6 +7,7 @@ from tensorflow.keras.layers import Dense, Conv2D, Flatten, MaxPooling2D
 from tensorflow.keras.utils import to_categorical
 from sklearn.metrics import confusion_matrix
 from tensorflow.keras.callbacks import History
+from tensorflow.keras.callbacks import ModelCheckpoint
 
 # Load dataset
 (train_images, train_labels), (test_images, test_labels) = mnist.load_data()
@@ -32,7 +33,9 @@ model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accur
 
 # Train model
 history = History()
-model.fit(train_images, train_labels, epochs=5, batch_size=64, validation_split=0.2, callbacks=[history])
+checkpoint = ModelCheckpoint('model.keras', monitor='val_accuracy', save_best_only=True)
+model.fit(train_images, train_labels, epochs=5, batch_size=64, validation_split=0.2, callbacks=[history, checkpoint])
+# model.fit(train_images, train_labels, epochs=5, batch_size=64, validation_split=0.2, callbacks=[history])
 
 # Evaluate on test set
 test_loss, test_acc = model.evaluate(test_images, test_labels)
@@ -74,24 +77,39 @@ plt.tight_layout()
 plt.show()
 
 # Display 25 images from the test set with their predicted labels
-plt.figure(figsize=(10,10))
+plt.figure(figsize=(10, 10))
 for i in range(25):
-    plt.subplot(5,5,i+1)
+    plt.subplot(5, 5, i + 1)
     plt.xticks([])
     plt.yticks([])
     plt.grid(False)
-    plt.imshow(test_images[i].reshape(28,28), cmap=plt.cm.binary)
+    plt.imshow(test_images[i].reshape(28, 28), cmap=plt.cm.binary)
     plt.xlabel(predicted_labels[i])
 plt.show()
 
 # a) Co się dzieje w preprocessing? Do czego służy funkcja reshape, to_categorical i np.argmax?
+# reshape - zmienia kształt macierzy, to_categorical - zamienia kolumnę z etykietami na macierz binarną,
+# np.argmax - zwraca indeksy maksymalnych wartości w macierzy.
 
 # b) Jak dane przepływają przez sieć i jak się w niej transformują? Co każda z warstw dostaje na
 # wejście i co wyrzuca na wyjściu?
+# W sieci neuronowej dane przepływają od warstwy wejściowej do warstwy wyjściowej. Każda warstwa dostaje na
+# wejście wynik poprzedniej warstwy, a na wyjściu zwraca wynik, który jest przekazywany do kolejnej warstwy.
+# Warstwa wejściowa dostaje dane wejściowe, a warstwa wyjściowa zwraca wynik końcowy. Warstwy ukryte przekształcają
+# dane wejściowe, aby model mógł nauczyć się reprezentacji danych.
 
 # c) Jakich błędów na macierzy błędów jest najwięcej. Które cyfry są często mylone z jakimi innymi?
+# Model najczęściej myli cyfry 5 z 3, 9 z 4, i 2 z 7.
 
 # d) Co możesz powiedzieć o krzywych uczenia się. Czy mamy przypadek przeuczenia lub niedouczenia się?
+# Krzywe uczenia pokazują, że model uczy się dobrze, ponieważ zarówno dokładność treningu, jak i walidacji
+# rosną wraz z liczbą epok. Nie ma przeuczenia ani niedouczenia, ponieważ krzywe uczenia są bliskie sobie.
 
 # e) Jak zmodyfikować kod programu, aby model sieci był zapisywany do pliku h5 co epokę, pod warunkiem,
 # że w tej epoce osiągnęliśmy lepszy wynik?
+# Można dodać callback ModelCheckpoint, który zapisuje model do pliku keras (h5 wywołuje błąd), jeśli
+# osiągnięto lepszy wynik na zbiorze walidacyjnym. Przykład:
+# from tensorflow.keras.callbacks import ModelCheckpoint
+#
+# checkpoint = ModelCheckpoint('model.keras', monitor='val_accuracy', save_best_only=True)
+# model.fit(train_images, train_labels, epochs=5, batch_size=64, validation_split=0.2, callbacks=[history, checkpoint])
