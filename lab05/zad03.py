@@ -22,7 +22,8 @@ def define_model():
     model.add(Conv2D(128, (3, 3), activation='relu', kernel_initializer='he_uniform', padding='same'))
     model.add(MaxPooling2D((2, 2)))
     model.add(Flatten())
-    model.add(Dense(128, activation='relu', kernel_initializer='he_uniform'))
+    model.add(Dense(128, activation='tanh', kernel_initializer='he_uniform'))
+    model.add(Dense(128, activation='tanh', kernel_initializer='he_uniform'))
     model.add(Dense(1, activation='sigmoid'))
     # compile model
     opt = SGD(learning_rate=0.001, momentum=0.9)
@@ -74,7 +75,7 @@ def run_test_harness():
                                                  class_mode='binary', batch_size=64, target_size=(200, 200))
     test_it = test_datagen.flow_from_directory('dataset_dogs_vs_cats/test/',
                                                class_mode='binary', batch_size=64, target_size=(200, 200))
-    checkpoint = ModelCheckpoint('model_cvd.keras', monitor='val_accuracy', save_best_only=True)
+    checkpoint = ModelCheckpoint('model_cvd_1.keras', monitor='val_accuracy', save_best_only=True)
     # fit model
     history = History()
     model.fit(train_it, steps_per_epoch=train_steps,
