@@ -21,6 +21,10 @@ def define_model():
     model.add(MaxPooling2D((2, 2)))
     model.add(Conv2D(128, (3, 3), activation='relu', kernel_initializer='he_uniform', padding='same'))
     model.add(MaxPooling2D((2, 2)))
+    model.add(Conv2D(128, (3, 3), activation='relu', kernel_initializer='he_uniform', padding='same'))
+    model.add(MaxPooling2D((2, 2)))
+    model.add(Conv2D(128, (3, 3), activation='relu', kernel_initializer='he_uniform', padding='same'))
+    model.add(MaxPooling2D((2, 2)))
     model.add(Flatten())
     model.add(Dense(128, activation='tanh', kernel_initializer='he_uniform'))
     model.add(Dense(128, activation='tanh', kernel_initializer='he_uniform'))
@@ -75,7 +79,7 @@ def run_test_harness():
                                                  class_mode='binary', batch_size=64, target_size=(200, 200))
     test_it = test_datagen.flow_from_directory('dataset_dogs_vs_cats/test/',
                                                class_mode='binary', batch_size=64, target_size=(200, 200))
-    checkpoint = ModelCheckpoint('model_cvd_1.keras', monitor='val_accuracy', save_best_only=True)
+    checkpoint = ModelCheckpoint('model_cvd.keras', monitor='val_accuracy', save_best_only=True)
     # fit model
     history = History()
     model.fit(train_it, steps_per_epoch=train_steps,
@@ -90,3 +94,11 @@ def run_test_harness():
 
 # entry point, run the test harness
 run_test_harness()
+
+# 1. 76.923
+# 2. 78.518 tanh, (128, 128)
+# 3. 77.011 (128, 128, 128)
+# 4. 77.630 (128, 128, 32)
+# 5. 49.595 softmax, (128, 128)
+# 6. 79.867 extra convolution, (128, 128)
+# 7. 81.437 extra convolution, (128, 128)
